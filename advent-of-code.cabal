@@ -21,7 +21,7 @@ source-repository head
   type: git
   location: https://github.com/githubuser/advent-of-code
 
-executable aoc-1
+executable day-1
   main-is: day-1.hs
   other-modules:
       Paths_advent_of_code

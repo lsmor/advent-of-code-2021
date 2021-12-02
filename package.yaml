@@ -24,6 +24,6 @@ dependencies:
 source-dirs: solutions
 
 executables:
-  aoc-1:
+  day-1:
     main: day-1.hs
     
