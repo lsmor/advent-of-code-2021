@@ -20,10 +20,15 @@ description:         Please see the README on GitHub at <https://github.com/gith
 
 dependencies:
 - base >= 4.7 && < 5
+- attoparsec
+- bytestring
 
 source-dirs: solutions
 
 executables:
+  # Notice that the name of the file MUST be lowercase, otherwise It is considered a module, and must be in separated folders
+  # I think, this is a haskell convention... But don't know
   day-1:
     main: day-1.hs
-    
+  day-2:
+    main: day-2.hs

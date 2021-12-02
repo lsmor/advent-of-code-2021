@@ -2,7 +2,6 @@
 
 module Main where
 import Data.Foldable (Foldable (fold, foldl'))
-import System.Environment (getArgs)
 
 
 countIncreasses :: [Int] -> Int
@@ -18,8 +17,7 @@ slideWindows input@(x:xs) = take 3 input : slideWindows xs
 
 main :: IO ()
 main = do
-    [path] <- getArgs
-    content <- readFile path
+    content <- getContents
     let input = read @Int <$> words content
     putStrLn  "Solution 1 is: "
     print $ countIncreasses input
