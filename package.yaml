@@ -23,6 +23,11 @@ dependencies:
 - attoparsec
 - bytestring
 
+default-extensions: 
+- TypeApplications
+- OverloadedStrings
+- LambdaCase
+
 source-dirs: solutions
 
 executables:
@@ -32,3 +37,5 @@ executables:
     main: day-1.hs
   day-2:
     main: day-2.hs
+  day-3:
+    main: day-3.hs

@@ -1,12 +1,8 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Main where
-import Data.Foldable (Foldable(fold, foldl'))
 import Data.Attoparsec.ByteString.Char8
-    ( parseOnly, string, endOfInput, Parser, decimal )
+    ( parseOnly, string, Parser, decimal )
 import Control.Applicative ((<|>), Applicative (liftA2))
 import qualified Data.ByteString.Char8 as BS
-import Control.Monad (foldM)
 
 -- Logic 
 
@@ -14,11 +10,11 @@ data Point a = Point !a !a deriving (Eq, Show)
 data Control  = Control {position :: Point Int , aim :: Int} deriving (Eq, Show)
 data Instruction = Forward Int | Down Int | Up Int deriving (Eq, Show)
 
-x :: Point a -> a
-x (Point a a') = a
+getX :: Point a -> a
+getX (Point a _) = a
 
-y :: Point a -> a
-y (Point a a') = a'
+getY :: Point a -> a
+getY (Point _ a') = a'
 
 instance Num a => Semigroup (Point a) where
   (Point x y) <> (Point x' y') = Point (x + x') (y + y')
@@ -65,7 +61,7 @@ main = do
       Left s -> print s
       Right ins -> do
           putStrLn  "Solution 1 is: "
-          print $ liftA2 (*) x y (foldMap toPoint ins)
+          print $ liftA2 (*) getX getY (foldMap toPoint ins)
           putStrLn  "Solution 2 is: "
-          print $ liftA2 (*) (x . position) (y . position) (foldMap toControl ins)
+          print $ liftA2 (*) (getX . position) (getY . position) (foldMap toControl ins)
 
