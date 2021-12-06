@@ -22,11 +22,15 @@ dependencies:
 - base >= 4.7 && < 5
 - attoparsec
 - bytestring
+- containers
+- matrix
+- vector
 
 default-extensions: 
 - TypeApplications
 - OverloadedStrings
 - LambdaCase
+- TupleSections
 
 source-dirs: solutions
 
