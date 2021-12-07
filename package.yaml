@@ -47,3 +47,5 @@ executables:
     main: day-4.hs
   day-5:
     main: day-5.hs
+  day-6:
+    main: day-6.hs
