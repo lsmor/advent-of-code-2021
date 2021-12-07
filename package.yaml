@@ -45,3 +45,5 @@ executables:
     main: day-3.hs
   day-4:
     main: day-4.hs
+  day-5:
+    main: day-5.hs
