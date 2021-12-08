@@ -32,6 +32,7 @@ executable day-1
       OverloadedStrings
       LambdaCase
       TupleSections
+      StrictData
   build-depends:
       attoparsec
     , base >=4.7 && <5
@@ -52,6 +53,7 @@ executable day-2
       OverloadedStrings
       LambdaCase
       TupleSections
+      StrictData
   build-depends:
       attoparsec
     , base >=4.7 && <5
@@ -72,6 +74,7 @@ executable day-3
       OverloadedStrings
       LambdaCase
       TupleSections
+      StrictData
   build-depends:
       attoparsec
     , base >=4.7 && <5
@@ -92,6 +95,7 @@ executable day-4
       OverloadedStrings
       LambdaCase
       TupleSections
+      StrictData
   build-depends:
       attoparsec
     , base >=4.7 && <5
@@ -112,6 +116,7 @@ executable day-5
       OverloadedStrings
       LambdaCase
       TupleSections
+      StrictData
   build-depends:
       attoparsec
     , base >=4.7 && <5
@@ -132,6 +137,7 @@ executable day-6
       OverloadedStrings
       LambdaCase
       TupleSections
+      StrictData
   build-depends:
       attoparsec
     , base >=4.7 && <5
@@ -152,6 +158,28 @@ executable day-7
       OverloadedStrings
       LambdaCase
       TupleSections
+      StrictData
+  build-depends:
+      attoparsec
+    , base >=4.7 && <5
+    , bytestring
+    , containers
+    , matrix
+    , vector
+  default-language: Haskell2010
+
+executable day-8
+  main-is: day-8.hs
+  other-modules:
+      Paths_advent_of_code
+  hs-source-dirs:
+      solutions
+  default-extensions:
+      TypeApplications
+      OverloadedStrings
+      LambdaCase
+      TupleSections
+      StrictData
   build-depends:
       attoparsec
     , base >=4.7 && <5

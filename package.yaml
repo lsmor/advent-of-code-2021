@@ -31,6 +31,7 @@ default-extensions:
 - OverloadedStrings
 - LambdaCase
 - TupleSections
+- StrictData
 
 source-dirs: solutions
 
@@ -51,3 +52,5 @@ executables:
     main: day-6.hs
   day-7:
     main: day-7.hs
+  day-8:
+    main: day-8.hs
