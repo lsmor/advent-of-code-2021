@@ -11,7 +11,8 @@ import Data.Map (Map)
 import Control.Applicative (Applicative(liftA2))
 import Data.Foldable ( Foldable(foldl') )
 import Data.Maybe (fromMaybe)
-import Debug.Trace
+
+
 
 type Segment = Char
 type Relation = [(Segment, Segment)]
