@@ -124,7 +124,7 @@ digitToInt d
   | d == seven = 7
   | d == eigth = 8
   | d == nine = 9
-  | otherwise  = trace (show d) $ error "unexpected number"
+  | otherwise  = error "unexpected number"
 
 decodeDisplay :: Display -> Int
 decodeDisplay (Display sig d0 d1 d2 d3) = f d0 * 1000 + f d1 * 100 + f d2 * 10 + f d3
