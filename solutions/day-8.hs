@@ -11,13 +11,15 @@ import Data.Map (Map)
 import Control.Applicative (Applicative(liftA2))
 import Data.Foldable ( Foldable(foldl') )
 import Data.Maybe (fromMaybe)
+import Control.Arrow ((>>>))
 
 
 
 type Segment = Char
-type Relation = [(Segment, Segment)]
 type Digit = Set Segment
 type Signal = [Digit]
+type Relation = [(Segment, Segment)]
+type Rule = Relation -> Signal -> Relation 
 data Display = Display {signals :: Signal, digit0 :: Digit, digit1 :: Digit, digit2 :: Digit, digit3 :: Digit} deriving (Eq, Show)
 
 zero :: Digit
@@ -61,53 +63,60 @@ findSeven = head . findBaseOnSegments 3
 findEigth = head . findBaseOnSegments 7
 
 -- Seven \\ One is the segment a
-rule1 :: Signal -> Relation -> Relation
-rule1 sig rel = (x, 'a'):rel
+rule1 :: Rule
+rule1 rel sig = (x, 'a'):rel
     where [x] = S.toList $ liftA2 S.difference findSeven findOne sig
 
 -- Number two is the only number with no segment f
-rule2 :: Signal -> Relation -> Relation
-rule2 sig rel = (x, 'f'):rel
+rule2 :: Rule
+rule2 rel sig = (x, 'f'):rel
     where complements = fmap (M.fromList . S.toList . S.map ( , 1 :: Int) . S.difference (findEigth sig)) sig -- Super inefficient transform Set to List and then to Map because there is no unionWith function in Data.Set
           counts = foldl' (M.unionWith (+)) M.empty complements
           [(x,_)] = M.toList $ M.filter (==1) counts
 
 -- Since we know 'f', we can deduce 'c' from number one
-rule3 :: Signal -> Relation -> Relation
-rule3 sig rel = (x, 'c'):rel
+rule3 :: Rule
+rule3 rel sig = (x, 'c'):rel
     where [(f, _)] = filter (('f'==) . snd ) rel
           [x] = S.toList $ S.delete f (findOne sig)
 
 -- We know 4 inter 2 inter 3 inter 5 is d
-rule4 :: Signal -> Relation -> Relation
-rule4 sig rel = (x, 'd'):rel
+rule4 :: Rule
+rule4 rel sig = (x, 'd'):rel
   where [a,b,c] = findBaseOnSegments 5 sig
         d = findFour sig
         [x] = S.toList $ a `S.intersection` b `S.intersection` c `S.intersection` d
 
 -- We now a, d, f. And number 4 is b, a, d, f. So 4 \\ relation = b
-rule5 :: Signal -> Relation -> Relation
-rule5 sig rel = (x, 'b'):rel
+rule5 :: Rule
+rule5 rel sig = (x, 'b'):rel
   where ks = S.fromList $ fmap fst rel
         [x] = S.toList $ S.difference (findFour sig) ks
 
 -- 0 inter 9 inter 6 is abfg and wen can deduce g since we know the rest
-rule6 :: Signal -> Relation -> Relation
-rule6 sig rel = (x, 'g'):rel
+rule6 :: Rule
+rule6 rel sig = (x, 'g'):rel
   where [a,b,c] = findBaseOnSegments 5 sig
         ks = S.fromList $ fmap fst rel
         s = a `S.intersection` b `S.intersection` c
         [x] = S.toList $ s `S.difference` ks
 
 -- One letter left.
-rule7 :: Signal -> Relation -> Relation
-rule7 sig rel = (x, 'e'):rel
+rule7 :: Rule
+rule7 rel sig = (x, 'e'):rel
   where s = findEigth sig
         ks = S.fromList $ fmap fst rel
         [x] = S.toList $ s `S.difference` ks
 
 buildRelation :: Signal -> Relation
-buildRelation sig = rule7 sig . rule6 sig . rule5 sig . rule4 sig . rule3 sig . rule2 sig . rule1 sig $ []
+buildRelation = rule1 []
+            >>= rule2
+            >>= rule3
+            >>= rule4
+            >>= rule5
+            >>= rule6
+            >>= rule7
+
 
 decode :: Digit -> Relation -> Digit
 decode d rel = S.map (fromMaybe 'z' . (`lookup` rel)) d
@@ -151,9 +160,6 @@ displayParser = do
 
 inputParser :: Parser [Display]
 inputParser = displayParser `sepBy1` endOfLine
-
---- >>> parseOnly displayParser "be cfbegad cbdgef fgaecd cgeb fdcge agebfd fecdb fabcd edb | fdgacbe cefdb cefbgd gcbe"
--- Right (Display {signals = [fromList "be",fromList "abcdefg",fromList "bcdefg",fromList "acdefg",fromList "bceg",fromList "cdefg",fromList "abdefg",fromList "bcdef",fromList "abcdf",fromList "bde"], digit0 = fromList "abcdefg", digit1 = fromList "bcdef", digit2 = fromList "bcdefg", digit3 = fromList "bceg"})
 
 main :: IO ()
 main = do
